@@ -5,7 +5,7 @@ export class CreateTodoTable1700394238770 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     /* todoテーブルがない場合は todo テーブル作成 */
     await queryRunner.query(`
-        CREATE TABLE \`todo\` (
+      CREATE TABLE IF NOT EXISTS \`todo\` (
           \`id\` INT NOT NULL AUTO_INCREMENT,
           \`title\` VARCHAR(191) NOT NULL,
           \`content\` VARCHAR(191) NOT NULL,
@@ -16,7 +16,7 @@ export class CreateTodoTable1700394238770 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      DROP TABLE \`todo\`;
+      DROP TABLE IF EXISTS \`todo\`;
     `);
   }
 }
