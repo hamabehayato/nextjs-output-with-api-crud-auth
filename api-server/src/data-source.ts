@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
   port: 3306,
   username: 'user',
   password: 'pass',
-  database: 'nextjs_output_with_crud_auth_DB', // Docker Composeで指定したMySQLのデータベース名
+  database: 'NEXTJS_OUTPUT_WITH_CRUD_AUTH_DB', // Docker Composeで指定したMySQLのデータベース名
   synchronize: true,
   logging: true,
   entities: [Todo],
