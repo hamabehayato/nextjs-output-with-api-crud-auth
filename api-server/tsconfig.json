@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    // デコレータ( @Entity など )の有効化
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    // ソースマップの生成
+    // これにより、デバッグ時にTypeScriptのソースコードとコンパイル後のJavaScriptコードを紐付けてデバッグ可能
+    "sourceMap": true,
+    // コンパイルされたJavaScriptファイルが出力されるディレクトリを指定
+    "outDir": "./dist",
+    "baseUrl": "./",
+    // インクリメンタルコンパイルを有効化
+    // 前回のコンパイルの結果をキャッシュし、再コンパイル時に必要な部分のみ再コンパイルする
+    "incremental": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+  }
+}

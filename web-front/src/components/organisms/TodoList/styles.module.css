@@ -1,0 +1,33 @@
+.todo {
+  box-sizing: border-box;
+  line-height: 1;
+  font-size: 24px;
+  border-radius: 8px;
+  color: #edebcb;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1000px;
+  width: 100%;
+  background-color: #00008b;
+  padding: 10px 20px;
+  margin: 0 auto;
+}
+
+.todo:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.iconBox {
+  display: flex;
+}
+
+.icon {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+.icon:not(:last-child) {
+  margin-right: 15px;
+}

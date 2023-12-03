@@ -1,0 +1,14 @@
+.container {
+  width: 50%;
+  margin: 80px auto;
+}
+
+.titleBox {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.titleBox > h1 {
+  font-size: 36px;
+  color: #fff;
+}
