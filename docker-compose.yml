@@ -35,7 +35,7 @@ services:
   db:
     container_name: nextjs_output_with_crud_auth_db
     environment:
-      - MYSQL_DATABASE=nextjs_output_with_crud_auth_DB
+      - MYSQL_DATABASE=NEXTJS_OUTPUT_WITH_CRUD_AUTH_DB
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pass
       - MYSQL_ROOT_PASSWORD=pass

@@ -54,7 +54,7 @@ DB 関連の情報
 以下の情報を元に「sequel ace」などを用いて DB コンテナにアクセスすれば、DB のデータの状態を確認できる
 DBMS: mysql: 8.0
 host: 127.0.0.1
-database: nextjs_output_with_crud_auth_DB
+database: NEXTJS_OUTPUT_WITH_CRUD_AUTH_DB
 user: user
 password: pass
 port: 3306
