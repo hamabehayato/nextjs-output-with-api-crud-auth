@@ -1,58 +1,17 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { User } from './entity/User';
-import { CreateUserDto } from './dto/create-user.dto';
+import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 /**
- * Get all users
+ * SineIn
  *
- * @route GET /api/users
+ * @route POST /api/singin
  */
-export const getUsers = async (_req: Request, res: Response) => {
+export const singIn = async (req: Request, res: Response) => {
   try {
-    // データベースからすべてのuserを取得
-    const allUsers = await AppDataSource.manager.find(User);
-
-    // 取得したuserをJSONレスポンスとしてクライアントに送信
-    res.status(200).json(allUsers);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'error' });
-  }
-};
-
-/**
- * Get find user
- *
- * @route GET /api/user/:id
- */
-export const findUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  console.log(id);
-
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOneBy({ id: parseInt(id, 10) });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-};
-
-/**
- * Create New user
- *
- * @route POST /api/user
- */
-export const createUser = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password } = req.body as CreateUserDto;
+    const { name, email, password } = req.body as SignInUserDto;
 
     const newUser = new User();
     newUser.name = name;
