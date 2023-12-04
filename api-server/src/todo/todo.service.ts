@@ -7,7 +7,7 @@ export class TodoService {
   async findAll(userId: number): Promise<Todo[]> {
     return await AppDataSource.manager.find(Todo, {
       where: {
-        userId,
+        user_id: userId,
       },
     });
   }
@@ -16,7 +16,7 @@ export class TodoService {
     return await AppDataSource.manager.findOne(Todo, {
       where: {
         id: id,
-        userId: userId,
+        user_id: userId,
       },
     });
   }
@@ -25,7 +25,7 @@ export class TodoService {
     const todoRepository = AppDataSource.getRepository(Todo);
     const newTodo = new Todo();
 
-    newTodo.userId = userId;
+    newTodo.user_id = userId;
     newTodo.title = createTodoDto.title;
     newTodo.content = createTodoDto.content;
     return await todoRepository.save(newTodo);
