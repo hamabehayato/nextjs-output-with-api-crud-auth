@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { AppDataSource } from '../data-source';
-import { User } from './entity/User';
 import { SignUpUserDto } from './dto/sign-up-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 
@@ -31,6 +29,8 @@ export const signIn = async (req: Request, res: Response) => {
         .status(200)
         .json({ user: resUser.user, accessToken: resUser.accessToken });
     }
+
+    throw new Error('Internal Server Error');
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error });
@@ -46,28 +46,27 @@ export const signUp = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body as SignUpUserDto;
 
-    const findEmail = await AppDataSource.manager.findOne(User, {
-      where: {
-        email: email,
-      },
+    const resUser = await authService.signUp({
+      name: name,
+      email: email,
+      password: password,
     });
-    if (findEmail) {
+
+    if (resUser?.errorCode && resUser?.errorMessage) {
       return res
-        .status(500)
-        .json({ error: `${email} は別のアカウントで使用されています。` });
+        .status(resUser.errorCode)
+        .json({ error: resUser.errorMessage });
     }
 
-    const newUser = new User();
-    newUser.name = name;
-    newUser.email = email;
-    newUser.password = password;
+    if (resUser?.user && resUser?.accessToken) {
+      return res
+        .status(200)
+        .json({ user: resUser.user, accessToken: resUser.accessToken });
+    }
 
-    const userRepository = AppDataSource.getRepository(User);
-    await userRepository.save(newUser);
-
-    res.status(200).json('Create User');
+    throw new Error('Internal Server Error');
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'error' });
+    res.status(500).json({ error: error });
   }
 };
