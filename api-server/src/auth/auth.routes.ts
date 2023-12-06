@@ -1,25 +1,17 @@
-// /**
-//  * User API
-//  *
-//  * @package src/user
-//  * @route GET /api/users
-//  */
-// import * as express from 'express';
-// import {
-//   getUsers,
-//   findUser,
-//   createUser,
-//   updateUser,
-//   deleteUser,
-// } from './auth.controller';
+/**
+ * User API
+ *
+ * @package src/user
+ * @route POST /api/signup
+ * @route POST /api/signin
+ */
+import * as express from 'express';
+import { signUp, signIn } from './auth.controller';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // ルートを定義する
-// router.get('/users', getUsers);
-// router.get('/user/:id', findUser);
-// router.post('/user', createUser);
-// router.put('/user/:id', updateUser);
-// router.delete('/user/:id', deleteUser);
+// ルート定義
+router.post('/signup', signUp);
+router.post('/signin', signIn);
 
-// export default router;
+export default router;

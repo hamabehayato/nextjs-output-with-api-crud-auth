@@ -1,13 +1,6 @@
 // typeORM entitiy file
 // learn more about it in the docs: https://typeorm.io/
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  OneToMany,
-  Timestamp,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Todo } from '../../todo/entity/Todo';
 
 @Entity()
@@ -26,6 +19,9 @@ export class User {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: string;
 
   // UserとTodoのリレーションを定義
   @OneToMany(() => Todo, (todo) => todo.user)

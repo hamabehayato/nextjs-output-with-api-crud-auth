@@ -1,17 +1,61 @@
 import { Request, Response } from 'express';
+import { AuthService } from './auth.service';
 import { AppDataSource } from '../data-source';
 import { User } from './entity/User';
+import { SignUpUserDto } from './dto/sign-up-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+
+// AuthServiceのインスタンスを1度だけ生成
+const authService = new AuthService();
 
 /**
- * SineIn
+ * ログイン
  *
  * @route POST /api/singin
  */
-export const singIn = async (req: Request, res: Response) => {
+export const signIn = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body as SignInUserDto;
+    const { email, password } = req.body as SignInUserDto;
+
+    const resUser = await authService.signIn({
+      email: email,
+      password: password,
+    });
+
+    if (resUser?.errorCode && resUser?.errorMessage) {
+      res.status(resUser.errorCode).json({ error: resUser.errorMessage });
+    }
+
+    if (resUser?.user && resUser?.accessToken) {
+      res
+        .status(200)
+        .json({ user: resUser.user, accessToken: resUser.accessToken });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
+};
+
+/**
+ * 会員登録
+ *
+ * @route POST /api/singin
+ */
+export const signUp = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password } = req.body as SignUpUserDto;
+
+    const findEmail = await AppDataSource.manager.findOne(User, {
+      where: {
+        email: email,
+      },
+    });
+    if (findEmail) {
+      return res
+        .status(500)
+        .json({ error: `${email} は別のアカウントで使用されています。` });
+    }
 
     const newUser = new User();
     newUser.name = name;
@@ -25,60 +69,5 @@ export const singIn = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'error' });
-  }
-};
-
-/**
- * Update a user by ID
- *
- * @route PUT /api/user/:id
- */
-export const updateUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name, email, password } = req.body as UpdateUserDto;
-
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOneBy({ id: parseInt(id, 10) });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // 更新するフィールドを設定
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.password = password || user.password;
-
-    // データベースに保存
-    await userRepository.save(user);
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-};
-
-/**
- * Delete a user by ID
- *
- * @route DELETE /api/user/:id
- */
-export const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const deleteUser = await userRepository.findOneBy({ id: parseInt(id, 10) });
-
-    if (!deleteUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    await userRepository.delete(deleteUser);
-
-    res.status(200).json(`Delete: id ${deleteUser.id}`);
-  } catch (error) {
-    res.status(500).json({ error: error });
   }
 };

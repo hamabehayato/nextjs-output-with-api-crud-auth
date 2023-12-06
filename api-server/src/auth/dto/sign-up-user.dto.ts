@@ -1,6 +1,6 @@
 import { IsNotEmpty, MaxLength, IsEmail } from 'class-validator';
 
-export class UpdateUserDto {
+export class SignUpUserDto {
   @IsNotEmpty()
   @MaxLength(255)
   name: string = '';
