@@ -1,19 +1,21 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from '../data-source';
-import { Todo } from './entity/Todo';
+import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+
+// TodoServiceのインスタンスを1度だけ生成
+const todoService = new TodoService();
 
 /**
  * Get all todos
  *
  * @route GET /api/todos
  */
-export const getTodos = async (_req: Request, res: Response) => {
+export const findAll = async (req: Request, res: Response) => {
   try {
     // データベースからすべてのtodoを取得
-    const allTodos = await AppDataSource.manager.find(Todo);
-
+    // テストが導入しやすいように、controller とservice を分離している
+    const allTodos = await todoService.findAll(req.body.userId);
     // 取得したtodoをJSONレスポンスとしてクライアントに送信
     res.status(200).json(allTodos);
   } catch (error) {
@@ -23,22 +25,20 @@ export const getTodos = async (_req: Request, res: Response) => {
 };
 
 /**
- * Get find todo
+ * Get find todoDetail
  *
  * @route GET /api/todo/:id
  */
-export const findTodo = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(id);
+  const { userId } = req.body;
 
   try {
-    const todoRepository = AppDataSource.getRepository(Todo);
-    const todo = await todoRepository.findOneBy({ id: parseInt(id, 10) });
+    const todo = await todoService.findOne(parseInt(id, 10), userId);
 
     if (!todo) {
       return res.status(404).json({ error: 'Todo not found' });
     }
-
     res.status(200).json(todo);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -50,18 +50,17 @@ export const findTodo = async (req: Request, res: Response) => {
  *
  * @route POST /api/todo
  */
-export const createTodo = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
+    const { userId } = req.params;
     const { title, content } = req.body as CreateTodoDto;
 
-    const newTodo = new Todo();
-    newTodo.title = title;
-    newTodo.content = content;
+    const createTodo = await todoService.create(
+      { title: title, content: content },
+      parseInt(userId, 10),
+    );
 
-    const todoRepository = AppDataSource.getRepository(Todo);
-    await todoRepository.save(newTodo);
-
-    res.status(200).json('Create Todo');
+    res.status(200).json(createTodo);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'error' });
@@ -73,26 +72,20 @@ export const createTodo = async (req: Request, res: Response) => {
  *
  * @route PUT /api/todo/:id
  */
-export const updateTodo = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, content } = req.body as UpdateTodoDto;
 
   try {
-    const todoRepository = AppDataSource.getRepository(Todo);
-    const todo = await todoRepository.findOneBy({ id: parseInt(id, 10) });
+    const updateTodo = await todoService.update(parseInt(id, 10), {
+      title: title,
+      content: content,
+    });
 
-    if (!todo) {
+    if (!updateTodo) {
       return res.status(404).json({ error: 'Todo not found' });
     }
-
-    // 更新するフィールドを設定
-    todo.title = title || todo.title;
-    todo.content = content || todo.content;
-
-    // データベースに保存
-    await todoRepository.save(todo);
-
-    res.status(200).json(todo);
+    res.status(200).json(updateTodo);
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -103,20 +96,16 @@ export const updateTodo = async (req: Request, res: Response) => {
  *
  * @route DELETE /api/todo/:id
  */
-export const deleteTodo = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const todoRepository = AppDataSource.getRepository(Todo);
-    const deleteTodo = await todoRepository.findOneBy({ id: parseInt(id, 10) });
+    const deleteTodo = await todoService.remove(parseInt(id, 10));
 
     if (!deleteTodo) {
       return res.status(404).json({ error: 'Todo not found' });
     }
-
-    await todoRepository.delete(deleteTodo);
-
-    res.status(200).json(`Delete: id ${deleteTodo.id}`);
+    res.status(200).json(deleteTodo);
   } catch (error) {
     res.status(500).json({ error: error });
   }
