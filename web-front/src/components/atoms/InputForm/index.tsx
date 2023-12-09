@@ -3,20 +3,21 @@
  *
  * @package components
  */
-import { FC } from 'react'
-import styles from './styles.module.css'
+import { FC } from 'react';
+import styles from './styles.module.css';
 
-type Props = JSX.IntrinsicElements['input']
+type Props = JSX.IntrinsicElements['input'];
 
 /**
  * InputForm
  * @returns {JSX.Element}
  * @constructor
  */
-export const InputForm: FC<Props> = ({ disabled = false, value, placeholder, onChange }) => {
+export const InputForm: FC<Props> = ({ type, disabled = false, value, placeholder, onChange }) => {
   return (
     <div className={styles.container}>
       <input
+        type={type}
         disabled={disabled}
         className={styles.input}
         placeholder={placeholder}
@@ -24,5 +25,5 @@ export const InputForm: FC<Props> = ({ disabled = false, value, placeholder, onC
         onChange={onChange}
       />
     </div>
-  )
-}
+  );
+};
