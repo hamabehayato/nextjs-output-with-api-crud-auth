@@ -9,7 +9,7 @@ const authService = new AuthService();
 /**
  * ログイン
  *
- * @route POST /api/singin
+ * @route POST /api/signin
  */
 export const signIn = async (req: Request, res: Response) => {
   try {
@@ -40,7 +40,7 @@ export const signIn = async (req: Request, res: Response) => {
 /**
  * 会員登録
  *
- * @route POST /api/singin
+ * @route POST /api/signin
  */
 export const signUp = async (req: Request, res: Response) => {
   try {
