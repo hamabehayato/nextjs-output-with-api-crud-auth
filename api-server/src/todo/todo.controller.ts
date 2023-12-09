@@ -20,7 +20,7 @@ export const findAll = async (req: Request, res: Response) => {
     res.status(200).json(allTodos);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'error' });
+    res.status(500).json({ error: error });
   }
 };
 
@@ -63,7 +63,7 @@ export const create = async (req: Request, res: Response) => {
     res.status(200).json(createTodo);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'error' });
+    res.status(500).json({ error: error });
   }
 };
 

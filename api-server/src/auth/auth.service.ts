@@ -10,7 +10,7 @@ export class AuthService {
   /**
    * ログイン
    *
-   * @route POST /api/singin
+   * @route POST /api/signin
    */
   signIn = async (SignInUserDto: SignInUserDto) => {
     const user = await AppDataSource.manager.findOne(User, {
@@ -48,7 +48,7 @@ export class AuthService {
   /**
    * 会員登録
    *
-   * @route POST /api/singin
+   * @route POST /api/signin
    */
   signUp = async (SignUpUserDto: SignUpUserDto) => {
     const findEmail = await AppDataSource.manager.findOne(User, {
