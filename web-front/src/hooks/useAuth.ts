@@ -13,14 +13,14 @@ import { NAVIGATION_LIST, NAVIGATION_PATH } from '@/constants/navigations';
  * @returns
  */
 export const useAuth = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const [user, setUser] = useState<UserType | undefined>(undefined);
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   /**
    * グローバルの認証状態をログイン済にする (ログイン)
    */
-  const singIn = useCallback(async (user: UserType) => {
+  const signIn = useCallback(async (user: UserType) => {
     setUser(user);
     setIsAuth(true);
   }, []);
@@ -32,6 +32,6 @@ export const useAuth = () => {
   return {
     user,
     isAuth,
-    singIn,
+    signIn,
   };
 };

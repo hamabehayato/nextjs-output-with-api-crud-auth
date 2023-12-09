@@ -10,11 +10,15 @@ import { AuthResponseType } from '@/interfaces/User';
  */
 export const signInApi = async (email: string, password: string) => {
   try {
-    const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/signIn', {
+    const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/signin', {
       email,
       password,
     });
-    return data;
+    const res: ResponseType<AuthResponseType> = {
+      code: 200,
+      data,
+    };
+    return res;
   } catch (err) {
     if (isAxiosError(err)) {
       return err.code;

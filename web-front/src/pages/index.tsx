@@ -4,12 +4,12 @@
  * @package pages
  */
 import type { NextPage } from 'next';
-import { SignUpTemplate } from '@/components/templates/SignUpTemplate';
+import { SignInTemplate } from '@/components/templates/SignInTemplate';
 
 /**
  * SignUpPage
  * @constructor
  */
-const SignUpPage: NextPage = () => <SignUpTemplate />;
+const SignInPage: NextPage = () => <SignInTemplate />;
 
-export default SignUpPage;
+export default SignInPage;
