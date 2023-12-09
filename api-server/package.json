@@ -7,6 +7,7 @@
     "start": "node dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "migrate": "npx typeorm-ts-node-commonjs migration:run -d src/data-source.ts"
   },
   "author": "",

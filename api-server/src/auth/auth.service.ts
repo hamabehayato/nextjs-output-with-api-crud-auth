@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as bcryptjs from 'bcryptjs';
 import { AppDataSource } from '../data-source';
 import { User } from './entity/User';
 import { SignUpUserDto } from './dto/sign-up-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
+import { ResponseUserType } from '../interfaces/User';
 
 export class AuthService {
   /**
@@ -26,11 +26,11 @@ export class AuthService {
       };
     }
 
+    /* アクセストークンを取得 */
     const payload = {
       userId: user.id,
       email: user.email,
     };
-
     const accessToken = jwt.sign(
       payload,
       process.env.JWT_SECRET_KEY as string,
@@ -50,33 +50,51 @@ export class AuthService {
    *
    * @route POST /api/singin
    */
-  signUp = async (req: Request, res: Response) => {
-    try {
-      const { name, email, password } = req.body as SignUpUserDto;
+  signUp = async (SignUpUserDto: SignUpUserDto) => {
+    const findEmail = await AppDataSource.manager.findOne(User, {
+      where: {
+        email: SignUpUserDto.email,
+      },
+    });
 
-      const findEmail = await AppDataSource.manager.findOne(User, {
-        where: {
-          email: email,
-        },
-      });
-      if (findEmail) {
-        return res
-          .status(500)
-          .json({ error: `${email} は別のアカウントで使用されています。` });
-      }
-
-      const newUser = new User();
-      newUser.name = name;
-      newUser.email = email;
-      newUser.password = password;
-
-      const userRepository = AppDataSource.getRepository(User);
-      await userRepository.save(newUser);
-
-      res.status(200).json('Create User');
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'error' });
+    if (findEmail) {
+      return {
+        errorCode: 500,
+        errorMessage: `${SignUpUserDto.email} は別のアカウントで使用されています。`,
+      };
     }
+
+    /* user情報を User テーブルに新規登録 */
+    const createUser = new User();
+    createUser.name = SignUpUserDto.name;
+    createUser.email = SignUpUserDto.email;
+    createUser.password = SignUpUserDto.password;
+    const userRepository = AppDataSource.getRepository(User);
+    await userRepository.save(createUser);
+
+    const resUser: ResponseUserType = {
+      id: createUser.id,
+      name: createUser.name,
+      email: createUser.email,
+      createdAt: createUser.createdAt,
+      updatedAt: createUser.updatedAt,
+    };
+
+    const payload = {
+      userId: resUser.id,
+      email: resUser.email,
+    };
+    const accessToken = jwt.sign(
+      payload,
+      process.env.JWT_SECRET_KEY as string,
+      {
+        expiresIn: '72h',
+      },
+    );
+
+    return {
+      user: resUser,
+      accessToken: accessToken,
+    };
   };
 }
