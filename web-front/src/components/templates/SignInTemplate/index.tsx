@@ -4,9 +4,11 @@
  * @package components
  */
 import { FC } from 'react';
+import Link from 'next/link';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { InputForm } from '@/components/atoms/InputForm';
 import { CommonButton } from '@/components/atoms/CommonButton';
+import { NAVIGATION_LIST } from '@/constants/navigations';
 import { useSignInTemplate } from './useSignInTemplate';
 import styles from './style.module.css';
 
@@ -25,6 +27,10 @@ export const SignInTemplate: FC = () => {
 
         <CommonButton type="submit" title="Sign In" />
       </form>
+
+      <div className={styles.link}>
+        <Link href={NAVIGATION_LIST.SIGNUP}>&lt;&lt; To Sign Up</Link>
+      </div>
     </div>
   );
 };
