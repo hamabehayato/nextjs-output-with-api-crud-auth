@@ -3,9 +3,11 @@
  *
  * @package components
  */
-import { NavigationLink } from '@/components/atoms/NavagationLink'
-import { NAVIGATION_LIST } from '@/constants/navigations'
-import styles from './styles.module.css'
+import { useAuthContext } from '@/contexts/AuthContext';
+import { useSignNavigation } from './useNavigation';
+import { NavigationLink } from '@/components/atoms/NavagationLink';
+import { NAVIGATION_LIST } from '@/constants/navigations';
+import styles from './styles.module.css';
 
 /**
  * Navigation
@@ -13,12 +15,16 @@ import styles from './styles.module.css'
  * @constructor
  */
 export const Navigation = () => {
+  const { signOut } = useAuthContext();
+  const [{ handleSignOut }] = useSignNavigation({ signOut });
+
   return (
     <nav>
       <ul className={styles.list}>
         <NavigationLink label={'Top'} linkPath={NAVIGATION_LIST.TOP} />
         <NavigationLink label={'Create'} linkPath={NAVIGATION_LIST.CREATE} />
+        <button onClick={handleSignOut}>Sign Out</button>
       </ul>
     </nav>
-  )
-}
+  );
+};
