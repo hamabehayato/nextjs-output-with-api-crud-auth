@@ -70,3 +70,31 @@ export const signUp = async (req: Request, res: Response) => {
     res.status(500).json({ error: error });
   }
 };
+
+/**
+ * 認証チェック
+ *
+ * @route POST /api/authentication
+ */
+export const authentication = async (req: Request, res: Response) => {
+  try {
+    const resUser = await authService.authCheck(req.body.user);
+
+    if (resUser?.errorCode && resUser?.errorMessage) {
+      return res
+        .status(resUser.errorCode)
+        .json({ error: resUser.errorMessage });
+    }
+
+    if (resUser?.user && resUser?.accessToken) {
+      return res
+        .status(200)
+        .json({ user: resUser.user, accessToken: resUser.accessToken });
+    }
+
+    throw new Error('Internal Server Error');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
+};
