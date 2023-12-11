@@ -50,12 +50,11 @@ export const useSignInTemplate = ({ signIn }: Params) => {
   const handleChangePassword: EventType['onChangeInput'] = useCallback((event) => setPassword(event.target.value), []);
 
   /**
-   * 会員等力処理
+   * ログイン処理
    */
   const handleSignIn: EventType['onSubmit'] = useCallback(
     async (event) => {
       event.preventDefault();
-
       if (email === '' || password === '') return;
 
       const res = await signInApi(email, password);
