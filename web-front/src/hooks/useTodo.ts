@@ -7,6 +7,7 @@
 // useCallback は 親コンポーネントから子コンポーネントに渡すコールバック関数をメモ化するのに使う。
 // https://zenn.dev/tsucchiiinoko/articles/8da862593a9980
 import { useState, useCallback, useEffect } from 'react';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { fetchTodoListApi, createTodoApi, updateTodoApi, deleteTodoApi } from '@/apis/todoApi';
 import { TodoType } from '@/interfaces/Todo';
 
@@ -14,6 +15,7 @@ import { TodoType } from '@/interfaces/Todo';
  * useTodo
  */
 export const useTodo = () => {
+  const { isAuth } = useAuthContext();
   /* todoList */
   const [originTodoList, setOriginTodoList] = useState<Array<TodoType>>([]);
 
@@ -89,11 +91,11 @@ export const useTodo = () => {
     [originTodoList]
   );
 
-  // useEffect でコンポーネントがレンダリング後・再レンダリング後に非同期な処理を行う
+  // useEffect はコンポーネントがレンダリング後・再レンダリング後に非同期な処理を行う
   // または、fetchTodoList に変更があった際に実行される(第２引数に依存する)
   useEffect(() => {
     fetchTodoList();
-  }, [originTodoList]);
+  }, [fetchTodoList, isAuth]);
 
   return {
     createTodo,

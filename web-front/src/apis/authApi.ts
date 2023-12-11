@@ -34,7 +34,6 @@ export const signInApi = async (email: string, password: string) => {
  * @returns
  */
 export const signUpApi = async (name: string, email: string, password: string) => {
-  console.log(name, email, password);
   const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/signup', {
     name: name,
     email: email,
@@ -45,4 +44,30 @@ export const signUpApi = async (name: string, email: string, password: string) =
     data,
   };
   return res;
+};
+
+/**
+ * 認証チェックAPI
+ * @returns
+ */
+export const authenticationApi = async () => {
+  try {
+    const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/authentication/');
+    const res: ResponseType<AuthResponseType> = {
+      code: 200,
+      data,
+    };
+    return res;
+  } catch (err) {
+    const res: ResponseType = {
+      code: 500,
+      message: '',
+    };
+    if (isAxiosError(err)) {
+      const axiosError = err as IErrorResponse;
+      res.code = axiosError?.response?.status;
+      res.message = axiosError?.message;
+    }
+    return res;
+  }
 };
