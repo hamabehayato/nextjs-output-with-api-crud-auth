@@ -66,9 +66,8 @@ export class AuthService {
 
     /* user情報を User テーブルに新規登録 */
     const createUser = new User();
-    createUser.name = SignUpUserDto.name;
-    createUser.email = SignUpUserDto.email;
-    createUser.password = SignUpUserDto.password;
+    Object.assign(createUser, SignUpUserDto);
+
     const userRepository = AppDataSource.getRepository(User);
     await userRepository.save(createUser);
 
@@ -84,6 +83,51 @@ export class AuthService {
       userId: resUser.id,
       email: resUser.email,
     };
+    const accessToken = jwt.sign(
+      payload,
+      process.env.JWT_SECRET_KEY as string,
+      {
+        expiresIn: '72h',
+      },
+    );
+
+    return {
+      user: resUser,
+      accessToken: accessToken,
+    };
+  };
+
+  /**
+   * 認証チェック
+   *
+   * @route POST /api/signin
+   */
+  authCheck = async (userId: number) => {
+    const findUser = await AppDataSource.manager.findOne(User, {
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!findUser) {
+      return {
+        errorCode: 500,
+        errorMessage: '認証データが存在しません。',
+      };
+    }
+
+    const resUser: ResponseUserType = {
+      id: findUser.id,
+      name: findUser.name,
+      email: findUser.email,
+      createdAt: findUser.createdAt,
+      updatedAt: findUser.updatedAt,
+    };
+    const payload = {
+      userId: resUser.id,
+      email: resUser.email,
+    };
+
     const accessToken = jwt.sign(
       payload,
       process.env.JWT_SECRET_KEY as string,
