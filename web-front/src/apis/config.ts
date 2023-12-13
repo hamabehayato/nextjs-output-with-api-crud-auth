@@ -1,5 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import { AuthResponseType } from '@/interfaces/User';
+// import { AuthResponseType } from '@/interfaces/User';
+
+const BASE_API_URL = process.env.BASE_API_URL || 'http://localhost';
 
 /**
  * ResponseType
@@ -11,17 +13,6 @@ export interface ResponseType<T = undefined> {
   data?: T;
   message?: String;
 }
-
-const BASE_API_URL = process.env.BASE_API_URL || 'http://localhost';
-
-export const globalAxios = axios.create({
-  baseURL: `${BASE_API_URL}/api`,
-  timeout: 1000,
-  // リクエストヘッダーを json 形式にすることを指定
-  headers: {
-    'Content-type': 'application/json',
-  },
-});
 
 export interface IErrorResponse {
   code: string;
@@ -42,6 +33,27 @@ export interface IErrorResponse {
   };
 }
 
-export const isAxiosError = (error: any): error is AxiosError => !!error.isAxiosError;
+const getToken = () => (localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null);
+
+const getAuthorizationHeader = () => `Bearer ${getToken()}`;
+
+const globalAxios = axios.create({
+  baseURL: `${BASE_API_URL}/api`,
+  timeout: 1000,
+  headers: {
+    'Content-type': 'application/json',
+  },
+});
+
+globalAxios.interceptors.request.use((config) => {
+  // もしリクエストにヘッダーがあれば、'Authorization' ヘッダーを設定
+  if (config?.headers) {
+    config.headers['Authorization'] = getAuthorizationHeader();
+  }
+
+  return config;
+});
 
 export default globalAxios;
+
+export const isAxiosError = (error: any): error is AxiosError => !!error.isAxiosError;

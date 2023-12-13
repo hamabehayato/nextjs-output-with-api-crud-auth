@@ -15,6 +15,7 @@ interface ContextInterface {
   user: UserType | undefined;
   isAuth: boolean;
   signIn: (user: UserType) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext({} as ContextInterface);
@@ -25,7 +26,7 @@ const AuthContext = createContext({} as ContextInterface);
  * @returns
  */
 export const AuthProvider: FC<Props> = ({ children }) => {
-  const { user, isAuth, signIn } = useAuth();
+  const { user, isAuth, signIn, signOut } = useAuth();
 
   return (
     <AuthContext.Provider
@@ -33,6 +34,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         user,
         isAuth,
         signIn,
+        signOut,
       }}
     >
       {children}
