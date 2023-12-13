@@ -44,9 +44,8 @@ export const useAuth = () => {
   /**
    * 非ログイン状態でログイン後の画面を開いたらリダイレクト
    */
-  const authRouting = useCallback(async (): Promise<void> => {
+  const authRouting = useCallback(async () => {
     let auth = false;
-
     const res = await authenticationApi();
 
     if (res?.data?.user) {

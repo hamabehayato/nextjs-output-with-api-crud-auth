@@ -71,7 +71,7 @@ export const useSignUpTemplate = ({ signIn }: Params) => {
   );
 
   /**
-   * 会員等力処理
+   * 会員登録処理
    */
   const handleSignUp: EventType['onSubmit'] = useCallback(
     async (event) => {

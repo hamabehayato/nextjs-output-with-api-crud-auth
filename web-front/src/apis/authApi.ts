@@ -20,9 +20,16 @@ export const signInApi = async (email: string, password: string) => {
     };
     return res;
   } catch (err) {
+    const res: ResponseType = {
+      code: 500,
+      message: '',
+    };
     if (isAxiosError(err)) {
-      return err.code;
+      const axiosError = err as IErrorResponse;
+      res.code = axiosError.response.status;
+      res.message = axiosError.response.data.message;
     }
+    return res;
   }
 };
 
@@ -52,7 +59,7 @@ export const signUpApi = async (name: string, email: string, password: string) =
  */
 export const authenticationApi = async () => {
   try {
-    const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/authentication/');
+    const { data }: AxiosResponse<AuthResponseType> = await globalAxios.post('/authentication');
     const res: ResponseType<AuthResponseType> = {
       code: 200,
       data,

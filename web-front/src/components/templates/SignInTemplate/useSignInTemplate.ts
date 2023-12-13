@@ -60,6 +60,7 @@ export const useSignInTemplate = ({ signIn }: Params) => {
       const res = await signInApi(email, password);
 
       if (res?.data?.user) {
+        signIn(res.data.user);
         localStorage.setItem('access_token', res.data.accessToken);
         router.push(NAVIGATION_LIST.TOP);
       }
