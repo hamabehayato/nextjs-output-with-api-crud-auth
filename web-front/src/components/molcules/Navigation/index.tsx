@@ -19,12 +19,17 @@ export const Navigation = () => {
   const [{ handleSignOut }] = useSignNavigation({ signOut });
 
   return (
-    <nav>
-      <ul className={styles.list}>
-        <NavigationLink label={'Top'} linkPath={NAVIGATION_LIST.TOP} />
-        <NavigationLink label={'Create'} linkPath={NAVIGATION_LIST.CREATE} />
-        <button onClick={handleSignOut}>Sign Out</button>
-      </ul>
-    </nav>
+    <div className={styles.header}>
+      <h1 className={styles.title}>Todo List</h1>
+      <nav className={styles.nav}>
+        <ul className={styles.list}>
+          <NavigationLink label={'Top'} linkPath={NAVIGATION_LIST.TOP} />
+          <NavigationLink label={'Create'} linkPath={NAVIGATION_LIST.CREATE} />
+          <li className={styles.item}>
+            <button onClick={handleSignOut}>Sign Out</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 };

@@ -1,6 +1,10 @@
 .container {
+  margin-bottom: 80px;
+}
+
+.contents {
   width: 50%;
-  margin: 80px auto;
+  margin: 0 auto;
 }
 
 .titleBox {
@@ -8,7 +12,7 @@
   margin-bottom: 40px;
 }
 
-.titleBox > h1 {
+.titleBox > h2 {
   font-size: 36px;
   color: #fff;
 }

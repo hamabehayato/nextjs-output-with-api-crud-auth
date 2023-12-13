@@ -3,14 +3,14 @@
  *
  * @package components
  */
-import { ReactNode } from 'react'
-import { Navigation } from '@/components/molcules/Navigation'
-import styles from './styles.module.css'
+import { ReactNode } from 'react';
+import { Navigation } from '@/components/molcules/Navigation';
+import styles from './styles.module.css';
 
 type Props = {
-  children: ReactNode
-  title: string
-}
+  children: ReactNode;
+  title: string;
+};
 
 export const BaseLayout = ({ children, title }: Props) => {
   /**
@@ -23,10 +23,12 @@ export const BaseLayout = ({ children, title }: Props) => {
       <section>
         <Navigation />
       </section>
-      <div className={styles.titleBox}>
-        <h1>{title}</h1>
+      <div className={styles.contents}>
+        <div className={styles.titleBox}>
+          <h2>{title}</h2>
+        </div>
+        {children}
       </div>
-      {children}
     </div>
-  )
-}
+  );
+};
