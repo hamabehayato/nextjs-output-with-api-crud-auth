@@ -4,10 +4,10 @@
 
 .item > a {
   display: block;
-  background-color: #00008b;
+  background-color: #fff;
   text-align: center;
   font-size: 20px;
-  color: #fff;
+  color: #00008b;
   text-decoration: none;
   padding: 14px 0;
   border-radius: 8px;
@@ -17,5 +17,6 @@
 .item > a:hover {
   transition: 0.2s;
   background-color: #0000cd;
+  color: #fff;
   border-radius: 8px;
 }
