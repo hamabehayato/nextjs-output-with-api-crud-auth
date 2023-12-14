@@ -8,12 +8,13 @@
  */
 import { Router } from 'express';
 import { signUp, signIn, authentication } from './auth.controller';
+import { authGuard } from '../auth/auth.guard';
 
 const router = Router();
 
 // ルート定義
 router.post('/signup', signUp);
 router.post('/signin', signIn);
-router.post('/authentication', authentication);
+router.post('/authentication', authGuard, authentication);
 
 export default router;

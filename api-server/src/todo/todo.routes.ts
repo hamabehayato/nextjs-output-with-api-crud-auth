@@ -10,14 +10,15 @@
  */
 import * as express from 'express';
 import { findAll, findOne, create, update, remove } from './todo.controller';
+import { authGuard } from '../auth/auth.guard';
 
 const router = express.Router();
 
 // ルートを定義する
-router.get('/todos', findAll);
-router.get('/todo/:id', findOne);
-router.post('/todo', create);
-router.put('/todo/:id', update);
-router.delete('/todo/:id', remove);
+router.get('/todos', authGuard, findAll);
+router.get('/todo/:id', authGuard, findOne);
+router.post('/todo', authGuard, create);
+router.put('/todo/:id', authGuard, update);
+router.delete('/todo/:id', authGuard, remove);
 
 export default router;

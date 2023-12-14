@@ -21,11 +21,11 @@ export class TodoService {
     });
   }
 
-  async create(createTodoDto: CreateTodoDto, userId: number) {
+  async create(createTodoDto: CreateTodoDto) {
     const todoRepository = AppDataSource.getRepository(Todo);
     const newTodo = new Todo();
 
-    newTodo.user_id = userId;
+    newTodo.user_id = createTodoDto.userId;
     newTodo.title = createTodoDto.title;
     newTodo.content = createTodoDto.content;
     return await todoRepository.save(newTodo);
