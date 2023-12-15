@@ -3,17 +3,18 @@
  *
  * @package components
  */
-import { useTodoContext } from '@/contexts/TodoContext'
-import { useTodoListTemplate } from './useTodoListTemplate'
-import { BaseLayout } from '@/components/organisms/BaseLayout'
-import { TodoList } from '@/components/organisms/TodoList'
-import { InputForm } from '@/components/atoms/InputForm'
+import { useTodoContext } from '@/contexts/TodoContext';
+import { useTodoListTemplate } from './useTodoListTemplate';
+import { BaseLayout } from '@/components/organisms/BaseLayout';
+import { TodoList } from '@/components/organisms/TodoList';
+import { InputForm } from '@/components/atoms/InputForm';
 
 export const TodoListTemplate = () => {
-  const { originTodoList, deleteTodo } = useTodoContext()
-  const [{ inputSearch, showTodoList }, { handleChangeSearch }] = useTodoListTemplate({
+  const { originTodoList, deleteTodo } = useTodoContext();
+  const [{ inputSearch, showTodoList }, { handleChangeSearch, handleDeleteTodo }] = useTodoListTemplate({
     originTodoList,
-  })
+    deleteTodo,
+  });
 
   /**
    * TodoListTemplate
@@ -22,13 +23,9 @@ export const TodoListTemplate = () => {
    */
   return (
     <BaseLayout title={'TodoList'}>
-      <InputForm
-        value={inputSearch}
-        placeholder={'Search Key Word'}
-        onChange={handleChangeSearch}
-      />
+      <InputForm value={inputSearch} placeholder={'Search Key Word'} onChange={handleChangeSearch} />
 
-      {showTodoList.length > 0 && <TodoList showTodoList={showTodoList} deleteTodo={deleteTodo} />}
+      {showTodoList.length > 0 && <TodoList showTodoList={showTodoList} handleDeleteTodo={handleDeleteTodo} />}
     </BaseLayout>
-  )
-}
+  );
+};

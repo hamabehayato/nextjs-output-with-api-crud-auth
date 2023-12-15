@@ -84,9 +84,12 @@ export const useTodo = () => {
    */
   const deleteTodo = useCallback(
     async (targetId: number) => {
-      const deletedTodo = await deleteTodoApi(targetId);
-      if (typeof deletedTodo !== 'object') return;
-      setOriginTodoList(originTodoList.filter((todo) => todo.id !== deletedTodo.id));
+      const res = await deleteTodoApi(targetId);
+
+      if (!res.data || typeof res.data !== 'object') return;
+
+      setOriginTodoList(originTodoList.filter((todo) => todo.id !== res?.data?.id));
+      fetchTodoList();
     },
     [originTodoList]
   );
@@ -94,7 +97,7 @@ export const useTodo = () => {
   // useEffect はコンポーネントがレンダリング後・再レンダリング後に非同期な処理を行う
   // または、fetchTodoList に変更があった際に実行される(第２引数に依存する)
   useEffect(() => {
-    fetchTodoList();
+    if (isAuth) fetchTodoList();
   }, [fetchTodoList, isAuth]);
 
   return {
