@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -52,13 +53,30 @@ export const findOne = async (req: Request, res: Response) => {
  */
 export const create = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        errorCode: 401,
+        errorMessage: '認証が必要です。',
+      });
+    }
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: Token missing' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as {
+      userId: number;
+    };
+
     const { title, content } = req.body as CreateTodoDto;
 
-    const createTodo = await todoService.create(
-      { title: title, content: content },
-      parseInt(userId, 10),
-    );
+    const createTodo = await todoService.create({
+      userId: decoded.userId,
+      title: title,
+      content: content,
+    });
 
     res.status(200).json(createTodo);
   } catch (error) {
