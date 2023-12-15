@@ -9,6 +9,7 @@ import { EventType } from '@/interfaces/Event';
 
 type Params = {
   originTodoList: Array<TodoType>;
+  deleteTodo: (targetId: number) => void;
 };
 
 type StatesType = {
@@ -18,6 +19,7 @@ type StatesType = {
 
 type ActionsType = {
   handleChangeSearch: EventType['onChangeInput'];
+  handleDeleteTodo: (targetId: number, targetTitle: string) => void;
 };
 
 /**
@@ -28,7 +30,7 @@ type ActionsType = {
  * handleChangeContent: (function(*): void)
  * handleChangeTitle: (function(*): void)}]}
  */
-export const useTodoListTemplate = ({ originTodoList }: Params) => {
+export const useTodoListTemplate = ({ originTodoList, deleteTodo }: Params) => {
   /* local state */
   const [inputSearch, setInputSearch] = useState('');
 
@@ -51,12 +53,27 @@ export const useTodoListTemplate = ({ originTodoList }: Params) => {
     setInputSearch(e.target.value);
   }, []);
 
+  /**
+   * Todo 削除時の処理
+   * @param {number} targetId
+   * @param {string} targetTitle
+   */
+  const handleDeleteTodo = useCallback(
+    (targetId: number, targetTitle: string) => {
+      if (window.confirm(`「${targetTitle}」のtodoを削除しますか？`)) {
+        deleteTodo(targetId);
+      }
+    },
+    [deleteTodo]
+  );
+
   const states: StatesType = {
     inputSearch,
     showTodoList,
   };
   const actions: ActionsType = {
     handleChangeSearch,
+    handleDeleteTodo,
   };
 
   return [states, actions] as const;

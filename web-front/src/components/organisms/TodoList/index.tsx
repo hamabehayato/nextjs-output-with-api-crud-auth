@@ -3,26 +3,26 @@
  *
  * @package components
  */
-import Link from 'next/link'
-import { FC } from 'react'
-import { DetailIcon } from '@/components/atoms/Icons/Detail'
-import { EditIcon } from '@/components/atoms/Icons/Edit'
-import { TrashIcon } from '@/components/atoms/Icons/Trash'
-import { NAVIGATION_PATH } from '@/constants/navigations'
-import { TodoType } from '@/interfaces/Todo'
-import styles from './styles.module.css'
+import Link from 'next/link';
+import { FC } from 'react';
+import { DetailIcon } from '@/components/atoms/Icons/Detail';
+import { EditIcon } from '@/components/atoms/Icons/Edit';
+import { TrashIcon } from '@/components/atoms/Icons/Trash';
+import { NAVIGATION_PATH } from '@/constants/navigations';
+import { TodoType } from '@/interfaces/Todo';
+import styles from './styles.module.css';
 
 type Props = {
-  showTodoList: Array<TodoType>
-  deleteTodo: (id: number) => void
-}
+  showTodoList: Array<TodoType>;
+  handleDeleteTodo: (id: number, title: string) => void;
+};
 
 /**
  * TodoList
  * @returns {JSX.Element}
  * @constructor
  */
-export const TodoList: FC<Props> = ({ showTodoList, deleteTodo }) => {
+export const TodoList: FC<Props> = ({ showTodoList, handleDeleteTodo }) => {
   return (
     <>
       {showTodoList.map((todo) => (
@@ -35,12 +35,12 @@ export const TodoList: FC<Props> = ({ showTodoList, deleteTodo }) => {
             <Link href={`${NAVIGATION_PATH.EDIT}${todo.id}`} className={styles.icon}>
               <EditIcon />
             </Link>
-            <button onClick={() => deleteTodo(todo.id)} className={styles.icon}>
+            <button onClick={() => handleDeleteTodo(todo.id, todo.title)} className={styles.icon}>
               <TrashIcon />
             </button>
           </div>
         </div>
       ))}
     </>
-  )
-}
+  );
+};
