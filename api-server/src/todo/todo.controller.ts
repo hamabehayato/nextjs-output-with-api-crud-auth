@@ -53,27 +53,10 @@ export const findOne = async (req: Request, res: Response) => {
  */
 export const create = async (req: Request, res: Response) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({
-        errorCode: 401,
-        errorMessage: '認証が必要です。',
-      });
-    }
-    const token = authHeader.split(' ')[1];
-
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized: Token missing' });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as {
-      userId: number;
-    };
-
-    const { title, content } = req.body as CreateTodoDto;
+    const { userId, title, content } = req.body as CreateTodoDto;
 
     const createTodo = await todoService.create({
-      userId: decoded.userId,
+      userId: userId,
       title: title,
       content: content,
     });
