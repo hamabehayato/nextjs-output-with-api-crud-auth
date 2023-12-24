@@ -50,23 +50,27 @@ export class AuthService {
    *
    * @route POST /api/signin
    */
-  signUp = async (SignUpUserDto: SignUpUserDto) => {
+  signUp = async (signUpUserDto: SignUpUserDto) => {
     const findEmail = await AppDataSource.manager.findOne(User, {
       where: {
-        email: SignUpUserDto.email,
+        email: signUpUserDto.email,
       },
     });
 
     if (findEmail) {
       return {
         errorCode: 500,
-        errorMessage: `${SignUpUserDto.email} は別のアカウントで使用されています。`,
+        errorMessage: `${signUpUserDto.email} は別のアカウントで使用されています。`,
       };
     }
 
+    const hashPassword = await bcryptjs.hash(signUpUserDto.password, 10);
+
     /* user情報を User テーブルに新規登録 */
     const createUser = new User();
-    Object.assign(createUser, SignUpUserDto);
+    createUser.name = signUpUserDto.name;
+    createUser.email = signUpUserDto.email;
+    createUser.password = hashPassword;
 
     const userRepository = AppDataSource.getRepository(User);
     await userRepository.save(createUser);
