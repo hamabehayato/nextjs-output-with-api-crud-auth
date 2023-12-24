@@ -1,11 +1,11 @@
 // ファイル生成コマンド npx typeorm migration:create src/migration/User
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateTodoTable1700394238770 implements MigrationInterface {
+export class CreateTodosTable1700394238770 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     /* todoテーブルがない場合は todo テーブル作成 */
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS \`todo\` (
+      CREATE TABLE IF NOT EXISTS \`todos\` (
           \`id\` INT NOT NULL AUTO_INCREMENT,
           \`user_id\` INT NOT NULL,
           \`title\` VARCHAR(191) NOT NULL,
@@ -17,7 +17,7 @@ export class CreateTodoTable1700394238770 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      DROP TABLE IF EXISTS \`todo\`;
+      DROP TABLE IF EXISTS \`todos\`;
     `);
   }
 }

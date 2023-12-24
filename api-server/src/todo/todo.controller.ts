@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';

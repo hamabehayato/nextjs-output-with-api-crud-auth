@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { User } from '../../auth/entity/User';
 
-@Entity()
+@Entity({ name: 'todos' })
 export class Todo {
   @PrimaryGeneratedColumn()
   id: number;
