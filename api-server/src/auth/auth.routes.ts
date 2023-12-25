@@ -8,7 +8,7 @@
  */
 import { Router } from 'express';
 import { signUp, signIn, authentication } from './auth.controller';
-import { authGuard } from '../auth/auth.guard';
+import { authGuard } from '../lib/guards/jwt-auth.guard';
 
 const router = Router();
 

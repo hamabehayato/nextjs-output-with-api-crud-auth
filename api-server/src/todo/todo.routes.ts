@@ -10,7 +10,7 @@
  */
 import * as express from 'express';
 import { findAll, findOne, create, update, remove } from './todo.controller';
-import { authGuard } from '../auth/auth.guard';
+import { authGuard } from '../lib/guards/jwt-auth.guard';
 
 const router = express.Router();
 
